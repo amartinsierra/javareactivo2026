@@ -1,0 +1,2 @@
+Simular un sensor de temperatura que emite información cada medio segundo. El valor de la temperatura se puede generar aleatoriamente dentro de un rango específico (entre 5 y 40 grados).
+El programa debe imprime un mensaje de alerta si la tempreatura recibida es inferior a 10 o superior a 35.
