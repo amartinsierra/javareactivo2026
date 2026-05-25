@@ -1,0 +1,2 @@
+Realizar un programa que envíe cada medio segundo la información leida de dos sensores: temperatura y humedad. La temperatura se puede generar aleatoriamente dentro de un rango específico (entre 5 y 40 grados) y la humedad entre 20% y 80%. 
+El programa debe imprimir un mensaje de alerta si la temperatura recibida es inferior a 10 o superior a 35, o si la humedad es inferior al 30% o superior al 70%.
