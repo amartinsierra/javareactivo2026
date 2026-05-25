@@ -15,24 +15,31 @@ public class ClienteGps {
 		double latitudRef=-1.0;
 		double distanciaMin=50;
 		ExecutorService executor=Executors.newCachedThreadPool();
-		Observable<Posicion> observable=gps.generarPosicionesCompletas().share();
+		
 		executor.submit(()->
+		{	
+			Observable<Posicion> observable=gps.generarPosicionesCompletas();
+		
         	observable.subscribe(
                         pos -> System.out.println("📡 Recibida: " + pos),
                         err -> System.err.println("❌ Error: " + err),
                         () -> System.out.println("✅ Flujo completado")
-                ));
-
+                );
+		});
 		executor.submit(()->
+		{
+			Observable<Posicion> observable=gps.generarPosicionesCompletas();
+		
 			observable.subscribe(pos->{
 				double distancia=Math.sqrt(Math.abs(pos.getLongitud()-longitudRef)/Math.abs(pos.getLatitud()-latitudRef))*100;
 				if(distancia<=distanciaMin) {
 					System.out.println("Alerta, objeto próximo!! "+distancia);
 				}
 				
-			})
+			});
 				
-				);
+				
+		});
         // dejamos correr la app unos segundos
         Thread.sleep(15000);
 
