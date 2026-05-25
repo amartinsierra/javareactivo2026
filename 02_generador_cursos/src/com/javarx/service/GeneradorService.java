@@ -18,6 +18,6 @@ public class GeneradorService {
 	  );
 	public Observable<Curso> catalogo(){
 		return Observable.fromIterable(cursos)
-				.flatMap(c->Observable.just(c).delay(300, TimeUnit.MILLISECONDS));//incluye retardo entre cada elemento
+				.concatMap(c->Observable.just(c).delay(300, TimeUnit.MILLISECONDS));//incluye retardo entre cada elemento
 	}
 }
