@@ -10,6 +10,11 @@ public class ProductoDto {
 		this.precio = precio;
 		this.stock = stock;
 	}
+	
+	public ProductoDto() {
+		super();
+	}
+
 	public int getCodigo() {
 		return codigo;
 	}

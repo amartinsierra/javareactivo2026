@@ -20,5 +20,8 @@ public class VentaDto {
 	public void setFacturacion(double facturacion) {
 		this.facturacion = facturacion;
 	}
+	public VentaDto() {
+		super();
+	}
 	
 }
