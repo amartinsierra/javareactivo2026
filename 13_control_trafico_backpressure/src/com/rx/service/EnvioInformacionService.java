@@ -11,7 +11,7 @@ public class EnvioInformacionService {
 	public EnvioInformacionService() {
 		this.flujo = Flowable.interval(10, TimeUnit.MILLISECONDS)
 				.map(i->new Coche("MAT "+i,(int)(Math.random()*100+40)))
-				.onBackpressureLatest(c->System.out.println("Se piede la matrícula "+c.getMatricula()))
+				.onBackpressureLatest()
 				.share();
 	}
 
