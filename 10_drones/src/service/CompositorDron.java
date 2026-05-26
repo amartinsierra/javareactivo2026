@@ -13,6 +13,10 @@ public class CompositorDron {
         //***rellenar aquí
 		//emitir un Observable con los datos de 10 drones,
 		//utilizando hilos de entrada/salida
-		
+		List<Observable<Dron>> drones = IntStream.rangeClosed(1, 10)
+                .mapToObj(i -> new HiloDron("Dron-" + i).flujoDatos())//Stream<Observable<Dron>>
+                .toList();
+		return Observable.merge(drones)
+				.subscribeOn(Schedulers.io());
     }
 }
