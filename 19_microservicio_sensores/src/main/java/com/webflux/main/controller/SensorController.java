@@ -30,7 +30,7 @@ public class SensorController {
 	}
 	
 	//otra entrada que devuelva un flujo con la combinación de ambos datos
-	@GetMapping(value="sensor/combi",produces=MediaType.TEXT_EVENT_STREAM_VALUE)
+	@GetMapping(value="sensor/combi",produces=MediaType.APPLICATION_NDJSON_VALUE)
 	public Flux<Sensor> sensorCombinado(){
 		return sensorService.sensorCombinado();
 	}
