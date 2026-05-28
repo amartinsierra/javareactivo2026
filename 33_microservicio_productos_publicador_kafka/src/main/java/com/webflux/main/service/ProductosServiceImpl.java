@@ -1,0 +1,73 @@
+package com.webflux.main.service;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+
+import com.webflux.main.model.Producto;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+@Service
+public class ProductosServiceImpl implements ProductosService {
+	private static List<Producto> productos=new ArrayList<>(List.of(new Producto(100,"Azucar","Alimentación",1.10,20),
+			new Producto(101,"Leche","Alimentación",1.20,15),
+			new Producto(102,"Jabón","Limpieza",0.89,30),
+			new Producto(103,"Mesa","Hogar",125,4),
+			new Producto(104,"Televisión","Hogar",650,10),
+			new Producto(105,"Huevos","Alimentación",2.20,30),
+			new Producto(106,"Fregona","Limpieza",3.40,6),
+			new Producto(107,"Detergente","Limpieza",8.7,12)));
+	private String topico="tiendaTopic";
+	KafkaTemplate<String,Producto> template;
+	
+	public ProductosServiceImpl(KafkaTemplate<String, Producto> template) {
+		this.template = template;
+	}
+
+	@Override
+	public Flux<Producto> catalogo() {
+		return Flux.fromIterable(productos)
+				.delayElements(Duration.ofSeconds(1));
+	}
+
+	@Override
+	public Flux<Producto> productosPorCategoria(String categoria) {
+		return Flux.fromIterable(productos)
+				.filter(p->p.getCategoria().equals(categoria))
+				.delayElements(Duration.ofSeconds(1));
+	}
+
+	@Override
+	public Mono<Producto> buscarProducto(int codigo) {
+		return Flux.fromIterable(productos)
+				.filter(p->p.getCodProducto()==codigo)
+				.next();
+	}
+
+	@Override
+	public Mono<Producto> altaProducto(Producto producto) {
+		return buscarProducto(producto.getCodProducto())
+	            .hasElement()
+	            .filter(existe -> !existe) // solo deja pasar si NO existe
+	            .flatMap(x -> Mono.fromSupplier(() -> {
+	                productos.add(producto);
+	                template.send(topico, producto);
+	                return producto;
+	            }));
+	}
+
+	@Override
+	public Mono<Producto> eliminarProducto(int codigo) {
+		return buscarProducto(codigo)
+				.map(p->{
+					productos.removeIf(pr->pr.getCodProducto()==codigo);
+					return p;
+				});
+				
+	}
+
+}
